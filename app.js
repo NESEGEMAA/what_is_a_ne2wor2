@@ -1,9 +1,9 @@
 let express = require("express");
 let path = require("path");
-
+let { connectToDb } = require("./controller/db");
+let userroutes = require("./routes");
 let app = express();
 let port = 3000;
-
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
@@ -12,10 +12,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
-app.listen(port, () => {
-  console.log(`listening on http://localhost:${port}`);
+connectToDb((err) => {
+  if (!err) {
+    app.listen(port, () => {
+      console.log(`listening on http://localhost:${port}`);
+    });
+  }
 });
-
 app.get("/", function (reg, res) {
   res.render("login", { title: "epxress" });
 });
@@ -58,3 +61,5 @@ app.get("/search", function (req, res) {
 app.get("/wanttogo", function (req, res) {
   res.render("wanttogo");
 });
+
+app.use(userroutes);
