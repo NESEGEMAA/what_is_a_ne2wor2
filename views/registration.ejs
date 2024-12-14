@@ -19,6 +19,17 @@
         color: white;
         -webkit-text-stroke: 0.5px black;
       }
+      /* Style for error messages */
+      .error-message {
+        background-color: transparent;
+        color: white;
+        border: none;
+        text-shadow: 0px 0px 2px black;
+        padding: 10px;
+        margin-top: 10px;
+        border-radius: 5px;
+        box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+      }
     </style>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -37,7 +48,7 @@
       <h1>Registration</h1>
     </div>
     <div class="cont">
-      <form method="post" action="/register">
+      <form method="post" action="/register" id="registerForm">
         Username: <br />
         <input type="text" id="user" name="username" /> <br />
         Password: <br />
@@ -51,6 +62,39 @@
         />
         <br />
       </form>
+      <div id="error-message"></div>
+      <script>
+        document
+          .getElementById("registerForm")
+          .addEventListener("submit", async (e) => {
+            e.preventDefault(); // Prevent default form submission
+            const username = document.getElementById("user").value.trim();
+            const password = document.getElementById("password").value.trim();
+            const errorDiv = document.getElementById("error-message");
+
+            try {
+              const response = await fetch("/register", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ username, password }),
+              });
+
+              const data = await response.json();
+              if (!response.ok) {
+                errorDiv.innerHTML = `<div class="error-message">${data.msg}</div>`;
+              } else {
+                errorDiv.innerHTML = `<div class="error-message">${data.msg}</div>`;
+                setTimeout(() => {
+                  window.location.href = "/";
+                }, 2000);
+              }
+            } catch (error) {
+              errorDiv.innerHTML = `<div class="error-message"> somthing went wrong please try again later </div>`;
+            }
+          });
+      </script>
     </div>
   </body>
 </html>

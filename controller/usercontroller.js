@@ -3,7 +3,9 @@ const usermodel = require("../model/usermodel");
 const registration = async (req, res) => {
   try {
     await usermodel.registration(req.body.username, req.body.password);
-    res.status(201).json({ msg: "User registered successfully." });
+    return res.status(201).json({
+      msg: "Registration is successfull! you will be directed to the login page in few moments",
+    });
   } catch (error) {
     console.log(error);
     return res.status(400).json({ msg: error.message });
