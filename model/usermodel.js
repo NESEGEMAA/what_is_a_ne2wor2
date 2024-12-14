@@ -16,7 +16,7 @@ const registration = async (username, password) => {
     if (checkUnique.length > 0) {
       throw new Error("please enter a unique username");
     }
-    let body = {
+    let body = {  
       username: username,
       password: password,
       wantToGo: [],
@@ -27,4 +27,29 @@ const registration = async (username, password) => {
   }
 };
 
-module.exports = { registration };
+const addToWantToGoList = async (username, destinationName) => {
+  try {
+    let db = getDb();
+
+    if (!username) {
+      throw new Error("Username is required");
+    }
+
+    if (!destinationName) {
+      throw new Error("Destination name is required");
+    }
+
+    // Add the destination to the user's Want-to-Go list
+    await db.collection("users").updateOne(
+      { username: username },
+      { $addToSet: { wantToGo: destinationName } } // Ensure no duplicates
+    );
+
+    return { message: "Destination added to Want-to-Go list", destination };
+  } catch (error) {
+    console.error("Error adding to Want-to-Go list:", error);
+    throw new Error(error.message);
+  }
+};
+
+module.exports = { registration, addToWantToGoList };
