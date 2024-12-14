@@ -11,7 +11,8 @@ const registration = async (req, res) => {
 };
 
 const handleAddToWantToGo = async (req, res) => {
-  const { username, destinationName } = req.body;
+  const { destinationName } = req.body;
+  const username = req.session.username;
 
   try {
     const result = await usermodel.addToWantToGoList(username, destinationName);
