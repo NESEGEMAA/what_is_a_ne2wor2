@@ -19,6 +19,7 @@ const registration = async (username, password) => {
     let body = {
       username: username,
       password: password,
+      wantToGo: [],
     };
     await user.collection("users").insertOne(body);
   } catch (error) {
