@@ -5,7 +5,7 @@ let dbConnection;
 // we are connected to th db
 module.exports = {
   connectToDb: (cb) => {
-    MongoClient.connect("mongodb://127.0.0.1:27017/networksproject")
+    MongoClient.connect("mongodb://127.0.0.1:27017/myDB")
       .then((client) => {
         // client is an object that represents the client created when connected to the db and this object has a function called db()
         //that allows us to connect ro the db
