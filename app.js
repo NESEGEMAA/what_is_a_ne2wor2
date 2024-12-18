@@ -33,7 +33,7 @@ connectToDb((err) => {
 });
 
 app.get("/", function (_req, res) {
-  res.render("login", { title: "express" });
+  res.render("login", { title: "express" , message: ""});
 });
 
 app.get("/home", function (_req, res) {
@@ -87,7 +87,7 @@ app.post("/", async function (req, res) {
     req.session.username = req.body.username;
     res.redirect("/home");
   } else {
-    res.redirect("/registration");
+    res.render("login", {message: "Incorrect username or password."});
   }
 });
 
