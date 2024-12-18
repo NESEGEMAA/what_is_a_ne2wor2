@@ -45,7 +45,7 @@ const addToWantToGoList = async (username, destinationName) => {
       { $addToSet: { wantToGo: destinationName } } // Ensure no duplicates
     );
 
-    return { message: "Destination added to Want-to-Go list", destination };
+    return { message: "Destination added to Want-to-Go list", destinationName };
   } catch (error) {
     console.error("Error adding to Want-to-Go list:", error);
     throw new Error(error.message);
