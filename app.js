@@ -7,6 +7,8 @@ const { Db } = require("mongodb");
 let app = express();
 let port = 3000;
 
+const { addToWantToGoList } = require("./model/usermodel");
+
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
@@ -15,6 +17,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(userroutes);
+
+app.use(session({
+  secret: 'zingema',
+  resave: false,
+  saveUninitialized: true
+}));
 
 connectToDb((err) => {
   if (!err) {
@@ -73,7 +81,7 @@ app.get("/santorini", function (_req, res) {
 });
 
 app.post("/", async function (req, res) {
-  const user = await getDb().collection("myCollection").find({username: req.body.username, password: req.body.password}).toArray()
+  const user = await getDb().collection("myCollection").find({username: req.body.username, password: req.body.password}).toArray();
   console.log(user);
   if (user.length != 0) {
     req.session.username = req.body.username;
@@ -101,6 +109,25 @@ app.post("/search", function (req, res) {
   res.render("searchresults", { results });
 });
 
-app.get("/wanttogo", function (_req, res) {
-  res.render("wanttogo");
+app.get("/wanttogo", async function (req, res) {
+  console.log(req.session);
+  const user = await getDb().collection("myCollection").find({ username: req.session.username }).toArray();
+  res.render("wanttogo", { wantToGo: user[0].wantToGo });
+});
+
+app.post("/add-to-wanttogo", async (req, res) => {
+  try {
+    const username = req.session.username;
+    const { destination } = req.body;
+
+    if (!username) {
+      return res.status(401).json({ error: "User not logged in" });
+    }
+
+    const result = await addToWantToGoList(username, destination);
+    res.json({ success: true, message: result.message, destination: result.destinationName });
+  } catch (error) {
+    console.error("Error adding destination:", error);
+    res.status(500).json({ success: false, error: error.message });
+  }
 });
