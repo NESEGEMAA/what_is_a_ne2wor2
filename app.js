@@ -1,5 +1,5 @@
 let express = require("express");
-const session = require('express-session');
+const session = require("express-session");
 let path = require("path");
 let { connectToDb, getDb } = require("./controller/db");
 let userroutes = require("./routes");
@@ -18,11 +18,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(userroutes);
 
-app.use(session({
-  secret: 'zingema',
-  resave: false,
-  saveUninitialized: true
-}));
+app.use(
+  session({
+    secret: "zingema",
+    resave: false,
+    saveUninitialized: true,
+  })
+);
 
 connectToDb((err) => {
   if (!err) {
@@ -33,7 +35,7 @@ connectToDb((err) => {
 });
 
 app.get("/", function (_req, res) {
-  res.render("login", { title: "express" , message: ""});
+  res.render("login", { title: "express", message: "" });
 });
 
 app.get("/home", function (req, res) {
@@ -130,13 +132,16 @@ app.get("/santorini", function (req, res) {
 });
 
 app.post("/", async function (req, res) {
-  const user = await getDb().collection("myCollection").find({username: req.body.username, password: req.body.password}).toArray();
+  const user = await getDb()
+    .collection("myCollection")
+    .find({ username: req.body.username, password: req.body.password })
+    .toArray();
   console.log(user);
   if (user.length != 0) {
     req.session.username = req.body.username;
     res.redirect("/home");
   } else {
-    res.render("login", {message: "Incorrect username or password."});
+    res.render("login", { message: "Incorrect username or password." });
   }
 });
 
@@ -155,12 +160,19 @@ app.post("/search", function (req, res) {
     item.name.toLowerCase().includes(search)
   );
 
-  res.render("searchresults", { results });
+  if (results.length === 0) {
+    res.send("No destination found");
+  } else {
+    res.render("searchresults", { results });
+  }
 });
 
 app.get("/wanttogo", async function (req, res) {
   console.log(req.session);
-  const user = await getDb().collection("myCollection").find({ username: req.session.username }).toArray();
+  const user = await getDb()
+    .collection("myCollection")
+    .find({ username: req.session.username })
+    .toArray();
   res.render("wanttogo", { wantToGo: user[0].wantToGo });
 });
 
@@ -174,7 +186,11 @@ app.post("/add-to-wanttogo", async (req, res) => {
     }
 
     const result = await addToWantToGoList(username, destination);
-    res.json({ success: true, message: result.message, destination: result.destinationName });
+    res.json({
+      success: true,
+      message: result.message,
+      destination: result.destinationName,
+    });
   } catch (error) {
     console.error("Error adding destination:", error);
     res.status(500).json({ success: false, error: error.message });
