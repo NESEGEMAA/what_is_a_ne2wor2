@@ -127,7 +127,7 @@ app.get("/santorini", function (req, res) {
     res.redirect("/");
     return;
   }
-  
+
   res.render("santorini");
 });
 
@@ -161,7 +161,7 @@ app.post("/search", function (req, res) {
   );
 
   if (results.length === 0) {
-    res.send("No destination found");
+    res.render("searchresults", { message: "No destination Found" });
   } else {
     res.render("searchresults", { results });
   }
