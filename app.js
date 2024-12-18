@@ -1,4 +1,5 @@
 let express = require("express");
+const session = require('express-session');
 let path = require("path");
 let { connectToDb, getDb } = require("./controller/db");
 let userroutes = require("./routes");
@@ -75,6 +76,7 @@ app.post("/", async function (req, res) {
   const user = await getDb().collection("myCollection").find({username: req.body.username, password: req.body.password}).toArray()
   console.log(user);
   if (user.length != 0) {
+    req.session.username = req.body.username;
     res.redirect("/home");
   } else {
     res.redirect("/registration");
