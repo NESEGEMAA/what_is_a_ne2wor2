@@ -161,14 +161,89 @@ app.post("/search", function (req, res) {
   );
 
   if (results.length === 0) {
-    res.render("searchresults", { message: "No destination Found" });
+    res.send(`<!DOCTYPE html>
+      <html lang="en">
+      <head>
+          <meta charset="UTF-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      
+          <!-- Google Font -->
+          <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;700&display=swap" rel="stylesheet">
+      
+          <style>
+              html, body {
+                  margin: 0;
+                  padding: 0;
+                  height: 100%;
+                  font-family: 'Montserrat', sans-serif;
+                  background: linear-gradient(120deg, #f6d365 0%, #fda085 100%);
+                  display: flex;
+                  flex-direction: column;
+                  justify-content: center;
+                  align-items: center;
+                  overflow: hidden;
+              }
+      
+              .message {
+                  color: #ffffff;
+                  font-size: 3rem;
+                  text-transform: uppercase;
+                  letter-spacing: 0.15em;
+                  font-weight: 700;
+                  text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+                  position: relative;
+                  margin-bottom: 50px;
+              }
+      
+              .message::before {
+                  content: '';
+                  position: absolute;
+                  left: -10%;
+                  right: -10%;
+                  bottom: -30%;
+                  height: 4px;
+                  background: rgba(255,255,255,0.5);
+                  box-shadow: 0 0 10px rgba(255,255,255,0.2), 0 0 20px rgba(255,255,255,0.2);
+                  transform: skewX(-20deg);
+              }
+      
+              .back-button {
+                  background: #ffffff;
+                  color: #fda085;
+                  border: none;
+                  padding: 15px 30px;
+                  font-size: 1rem;
+                  font-weight: 700;
+                  letter-spacing: 0.05em;
+                  border-radius: 25px;
+                  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                  cursor: pointer;
+                  transition: all 0.3s ease;
+                  text-transform: uppercase;
+              }
+      
+              .back-button:hover {
+                  background: #fda085;
+                  color: #ffffff;
+              }
+          </style>
+      </head>
+      <body>
+          <div class="message">No destination found</div>
+          <button class="back-button" onclick="history.back()">Go Back</button>
+      </body>
+      </html>`);
   } else {
     res.render("searchresults", { results });
   }
 });
 
 app.get("/wanttogo", async function (req, res) {
-  console.log(req.session);
+  if (req.session.username == undefined) {
+    res.redirect("/");
+    return;
+  }
+  
   const user = await getDb()
     .collection("myCollection")
     .find({ username: req.session.username })
