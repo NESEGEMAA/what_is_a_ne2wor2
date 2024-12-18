@@ -1,7 +1,8 @@
 let express = require("express");
 let path = require("path");
-let { connectToDb } = require("./controller/db");
+let { connectToDb, getDb } = require("./controller/db");
 let userroutes = require("./routes");
+const { Db } = require("mongodb");
 let app = express();
 let port = 3000;
 
@@ -68,6 +69,16 @@ app.get("/rome", function (_req, res) {
 
 app.get("/santorini", function (_req, res) {
   res.render("santorini");
+});
+
+app.post("/", async function (req, res) {
+  const user = await getDb().collection("myCollection").find({username: req.body.username, password: req.body.password}).toArray()
+  console.log(user);
+  if (user.length != 0) {
+    res.redirect("/home");
+  } else {
+    res.redirect("/registration");
+  }
 });
 
 app.post("/search", function (req, res) {
