@@ -40,6 +40,17 @@ const addToWantToGoList = async (username, destinationName) => {
     }
 
     // Add the destination to the user's Want-to-Go list
+    let user = await db.collection("myCollection").findOne(
+      { username: username }
+    )
+
+    console.log(user);
+
+    if (user.wantToGo.indexOf(destinationName) != -1) {
+      throw new Error("destination already in database");
+    }
+
+    // Add the destination to the user's Want-to-Go list
     await db.collection("myCollection").updateOne(
       { username: username },
       { $addToSet: { wantToGo: destinationName } } // Ensure no duplicates
