@@ -38,5 +38,17 @@
             </form>
         </div>
     </nav>
+    <div class="container">
+        <h1>Destinations You Want to Go</h1>
+        <ul>
+            <% if (wantToGo && wantToGo.length > 0) { %>
+                <% wantToGo.forEach(function(destination) { %>
+                    <li><%= destination %></li>
+                <% }); %>
+            <% } else { %>
+                <li>You have no destinations in your list yet.</li>
+            <% } %>
+        </ul>
+    </div>
 </body>
 </html>
