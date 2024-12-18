@@ -36,47 +36,96 @@ app.get("/", function (_req, res) {
   res.render("login", { title: "express" , message: ""});
 });
 
-app.get("/home", function (_req, res) {
+app.get("/home", function (req, res) {
+  if (req.session.username == undefined) {
+    res.redirect("/");
+    return;
+  }
   res.render("home");
 });
 
-app.get("/registration", function (_req, res) {
+app.get("/registration", function (req, res) {
   res.render("registration");
 });
 
-app.get("/annapurna", function (_req, res) {
+app.get("/annapurna", function (req, res) {
+  if (req.session.username == undefined) {
+    res.redirect("/");
+    return;
+  }
+
   res.render("annapurna");
 });
 
-app.get("/bali", function (_req, res) {
+app.get("/bali", function (req, res) {
+  if (req.session.username == undefined) {
+    res.redirect("/");
+    return;
+  }
+
   res.render("bali");
 });
 
-app.get("/cities", function (_req, res) {
+app.get("/cities", function (req, res) {
+  if (req.session.username == undefined) {
+    res.redirect("/");
+    return;
+  }
+
   res.render("cities");
 });
 
-app.get("/hiking", function (_req, res) {
+app.get("/hiking", function (req, res) {
+  if (req.session.username == undefined) {
+    res.redirect("/");
+    return;
+  }
+
   res.render("hiking");
 });
 
-app.get("/inca", function (_req, res) {
+app.get("/inca", function (req, res) {
+  if (req.session.username == undefined) {
+    res.redirect("/");
+    return;
+  }
+
   res.render("inca");
 });
 
-app.get("/islands", function (_req, res) {
+app.get("/islands", function (req, res) {
+  if (req.session.username == undefined) {
+    res.redirect("/");
+    return;
+  }
+
   res.render("islands");
 });
 
-app.get("/paris", function (_req, res) {
+app.get("/paris", function (req, res) {
+  if (req.session.username == undefined) {
+    res.redirect("/");
+    return;
+  }
+
   res.render("paris");
 });
 
-app.get("/rome", function (_req, res) {
+app.get("/rome", function (req, res) {
+  if (req.session.username == undefined) {
+    res.redirect("/");
+    return;
+  }
+
   res.render("rome");
 });
 
-app.get("/santorini", function (_req, res) {
+app.get("/santorini", function (req, res) {
+  if (req.session.username == undefined) {
+    res.redirect("/");
+    return;
+  }
+  
   res.render("santorini");
 });
 
