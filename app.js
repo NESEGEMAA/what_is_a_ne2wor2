@@ -161,7 +161,7 @@ app.post("/search", function (req, res) {
   );
 
   if (results.length === 0) {
-    res.render("searchresults", { message: "No destination Found" });
+    res.render("searchresults", { message: "Destination not Found" });
   } else {
     res.render("searchresults", { results });
   }
