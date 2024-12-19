@@ -81,7 +81,11 @@
       <ul>
         <% if (wantToGo && wantToGo.length > 0) { %> <%
         wantToGo.forEach(function(destination) { %>
-        <li><%= destination %></li>
+          <li>
+            <a href="/<%= destination.toLowerCase().replace(/\s+/g, '-') %>">
+              <%= destination %>
+            </a>
+          </li>
         <% }); %> <% } else { %>
         <li>You have no destinations in your list yet.</li>
         <% } %>
